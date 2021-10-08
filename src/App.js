@@ -1,25 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState, /*useEffect,*/ useContext} from 'react';
+
+const AppContext = React.createContext();
 
 function App() {
+  const [text, setText] = useState('Hello World');
+
+  const appContext = {
+    text:{
+      get: text,
+      set: setText
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContext.Provider value={appContext}>
+      <p>{appContext.text.get}</p>
+      <TextInput/>
+    </AppContext.Provider>
   );
 }
+
+
+// text input to update appContext's text value
+function TextInput(){
+  const {text} = useContext(AppContext);
+
+  const updateText = (e) => text.set(e.target.value);
+
+  return (
+    <input type='text' value={text.get} onChange={updateText}/>
+  );
+}
+
 
 export default App;
